@@ -54,7 +54,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.test.posts.R
 import com.test.posts.data.model.Post
+import com.test.posts.ui.component.ErrorState
 import com.test.posts.ui.component.InfiniteListHandler
+import com.test.posts.ui.component.LoadingIndicator
 import com.test.posts.ui.theme.AppTheme
 import timber.log.Timber
 import kotlin.math.roundToInt
@@ -75,64 +77,85 @@ fun PostsScreen(
             modifier = Modifier
                 .padding(scaffoldPadding)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 8.dp)
-            ) {
-                //OutlinedTextField(
-                //    value = uiState.query,
-                //    onValueChange = viewModel::onSearchQueryChange,
-                //    modifier = Modifier.fillMaxWidth(),
-                //    placeholder = { Text(text = "Search") }
-                //)
-                val lazyListState = rememberLazyStaggeredGridState()
-                LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Fixed(1),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalItemSpacing = 12.dp,
-                    state = lazyListState
-                ) {
-                    items(uiState.posts.size) { index ->
-                        val post = uiState.posts[index]
-                        PostItem(
-                            post = post,
-                            onPostClick = {
-                                Timber.tag("###").d("Clicked post $post")
-                                onNavigateDetails.invoke(post)
-                            },
-                            onClickFavouritePost = { p ->
-                                viewModel.toggleIsFavourite(p)
-                            }
+            when (uiState.ui) {
+                UiState.None -> {}
+                UiState.LoadingFirst -> {
+                    LoadingIndicator()
+                }
+                is UiState.ErrorFirst -> {
+                    ErrorState(
+                        stringResource(R.string.no_internet_connection)
+                    )
+                }
+                is UiState.Success -> {
+                    PostsScreenContent(
+                        onNavigateDetails = onNavigateDetails,
+                        viewModel = viewModel,
+                        uiState = uiState
+                    )
+                }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun PostsScreenContent(
+    onNavigateDetails: (Post) -> Unit,
+    viewModel: PostsViewModel,
+    uiState: PostsUiState
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 8.dp)
+    ) {
+        val lazyListState = rememberLazyStaggeredGridState()
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(1),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalItemSpacing = 12.dp,
+            state = lazyListState
+        ) {
+            items(uiState.posts.size) { index ->
+                val post = uiState.posts[index]
+                PostItem(
+                    post = post,
+                    onPostClick = {
+                        Timber.tag("###").d("Clicked post $post")
+                        onNavigateDetails.invoke(post)
+                    },
+                    onClickFavouritePost = { p ->
+                        viewModel.toggleIsFavourite(p)
+                    }
+                )
+            }
+            if (uiState.canLoadMore) {
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .progressSemantics()
+                                .size(32.dp),
+                            strokeWidth = 3.dp
                         )
                     }
-                    if (uiState.canLoadMore) {
-                        item(span = StaggeredGridItemSpan.FullLine) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .progressSemantics()
-                                        .size(32.dp),
-                                    strokeWidth = 3.dp
-                                )
-                            }
-                        }
-                    }
                 }
-                InfiniteListHandler(
-                    lazyListState = lazyListState,
-                    canLoadMore = uiState.canLoadMore
-                ) {
-                    if (uiState.canLoadMore) {
-                        val p = uiState.page
-                        val n = p + 1
-                        viewModel.loadPage(n)
-                    }
-                }
+            }
+        }
+        InfiniteListHandler(
+            lazyListState = lazyListState,
+            canLoadMore = uiState.canLoadMore
+        ) {
+            if (uiState.canLoadMore) {
+                val p = uiState.page
+                val n = p + 1
+                viewModel.loadPage(n)
             }
         }
     }

@@ -9,7 +9,9 @@
     <string name="posts_screen">Posts</string>
     <string name="favourite">Favourite</string>
 
+    <string name="no_internet_connection">No Internet connection</string>
     <string name="preferred">Preferred</string>
+    <string name="reload">Reload</string>
     <string name="top_bar_back">Back</string>
     <string name="top_bar_search">Search</string>
 

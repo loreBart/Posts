@@ -74,6 +74,11 @@ class PostsViewModel @Inject constructor(
             }.launchIn(viewModelScope)
         }
     }
+
+    fun reload() {
+
+    }
+
     fun loadPage(nextPage: Int) {
         Log.d("###", "loadPage NEXT PAGE -> $nextPage")
         viewModelScope.launch {

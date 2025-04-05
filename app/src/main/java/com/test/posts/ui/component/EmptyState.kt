@@ -65,8 +65,8 @@ fun EmptyState(
 private fun EmptyStatePreview() {
     AppTheme {
         EmptyState(
-            image = painterResource(R.drawable.empty_state_coins),
-            title = "No coins",
+            image = painterResource(R.drawable.empty_state_posts),
+            title = "No posts",
             subtitle = {
                 Text(
                     text = stringResource(R.string.empty_state_posts_subtitle),
