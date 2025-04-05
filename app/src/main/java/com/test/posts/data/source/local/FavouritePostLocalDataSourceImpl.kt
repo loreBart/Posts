@@ -18,7 +18,7 @@ class FavouritePostLocalDataSourceImpl(private val favouritePostDao: FavouritePo
         favouritePostDao.insert(post)
     }
 
-    override suspend fun deleteById(id: Long) {
+    override suspend fun deleteById(id: Int) {
         favouritePostDao.deleteById(id)
     }
 

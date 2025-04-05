@@ -13,11 +13,15 @@ class FavouritePostRepository @Inject constructor(
         return favouritePostLocalDataSource.getPostsFlow()
     }
 
+    suspend fun getPosts(): List<FavouriteLocalPost> {
+        return favouritePostLocalDataSource.getPosts()
+    }
+
     suspend fun insert(post: FavouriteLocalPost) {
         favouritePostLocalDataSource.insert(post)
     }
 
-    suspend fun deleteById(id: Long) {
+    suspend fun deleteById(id: Int) {
         favouritePostLocalDataSource.deleteById(id)
     }
 

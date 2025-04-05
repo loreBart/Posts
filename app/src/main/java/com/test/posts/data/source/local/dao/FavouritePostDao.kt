@@ -19,7 +19,7 @@ interface FavouritePostDao {
     suspend fun insert(post: FavouriteLocalPost)
 
     @Query("DELETE FROM posts WHERE id = :id")
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: Int)
 
     @Query("DELETE FROM posts")
     suspend fun deleteAll()

@@ -11,7 +11,7 @@ interface FavouritePostLocalDataSource {
 
     suspend fun insert(post: FavouriteLocalPost)
 
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: Int)
 
     suspend fun deleteAll()
 }

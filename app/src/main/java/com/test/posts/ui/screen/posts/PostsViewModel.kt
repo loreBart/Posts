@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.posts.data.Async
 import com.test.posts.data.model.Post
+import com.test.posts.data.model.toFavourite
 import com.test.posts.data.repository.FavouritePostRepository
 import com.test.posts.data.repository.PostRepository
 import com.test.posts.data.source.local.model.FavouriteLocalPost
@@ -23,8 +24,8 @@ import kotlin.math.min
 
 @HiltViewModel
 class PostsViewModel @Inject constructor(
-    postRepository: PostRepository,
-    favouritePostRepository: FavouritePostRepository,
+    private val postRepository: PostRepository,
+    private val favouritePostRepository: FavouritePostRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PostsUiState())
@@ -85,9 +86,16 @@ class PostsViewModel @Inject constructor(
             it.copy(query = query)
         }
     }
-    fun toggleFavouritesPost(post: Post) {
+    fun toggleIsFavourite(post: Post) {
         viewModelScope.launch {
-
+            val id = post.id
+            val favouritesPost = favouritePostRepository.getPosts()
+            val isFavourite = favouritesPost.map { it.id }.contains(id)
+            if (isFavourite) {
+                favouritePostRepository.deleteById(id)
+            } else {
+                favouritePostRepository.insert(post.toFavourite())
+            }
         }
     }
 
