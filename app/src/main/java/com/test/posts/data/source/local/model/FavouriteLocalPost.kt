@@ -3,6 +3,7 @@ package com.test.posts.data.source.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.test.posts.data.model.Post
 
 @Entity(tableName = "posts")
 data class FavouriteLocalPost(
@@ -16,3 +17,7 @@ data class FavouriteLocalPost(
     @ColumnInfo(name = "body")
     val body: String
 )
+
+fun FavouriteLocalPost.toPost(): Post {
+    return Post(id = id, userId = userId, title = title, body = body, isFavourite = true)
+}

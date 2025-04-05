@@ -36,8 +36,11 @@ fun InfiniteListHandler(
             .collect { load ->
                 Timber.tag("###").d("calling (${load.first}) callback FOR SIZE: ${load.second}")
                 if (load.first) {
+                    Timber.tag("###").d("calling 222222")
                     if (!loadedPages.contains(load.second)) {
+                        Timber.tag("###").d("calling 333333")
                         loadedPages.add(load.second)
+                        Timber.tag("###").d("calling canLoadMore: $canLoadMore")
                         if (canLoadMore) {
                             onLoadMore()
                         }

@@ -53,6 +53,7 @@ class PostsViewModel @Inject constructor(
                         val postList = posts.data
                         val canLoadMore = page*Constants.PAGE_SIZE < postList.size
                         val size = min(page*Constants.PAGE_SIZE, postList.size)
+                        Log.d("###", "ON COMBINE -> canLoadMore: $canLoadMore")
                         _uiState.update {
                             it.copy(
                                 ui = UiState.Success(page),
