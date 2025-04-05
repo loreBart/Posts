@@ -9,8 +9,8 @@ class FavouritePostRepository @Inject constructor(
     private val favouritePostLocalDataSource: FavouritePostLocalDataSource
 ) {
 
-    fun getPosts(): Flow<List<FavouriteLocalPost>> {
-        return favouritePostLocalDataSource.getPosts()
+    fun getPostsFlow(): Flow<List<FavouriteLocalPost>> {
+        return favouritePostLocalDataSource.getPostsFlow()
     }
 
     suspend fun insert(post: FavouriteLocalPost) {

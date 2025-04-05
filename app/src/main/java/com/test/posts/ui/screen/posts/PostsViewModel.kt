@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.min
 
 @HiltViewModel
 class PostsViewModel @Inject constructor(
@@ -33,7 +34,7 @@ class PostsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            combine(postRepository.loadPosts(), favouritePostRepository.getPosts(), _page, _query) { posts, favourites, page, query ->
+            combine(postRepository.loadPosts(), favouritePostRepository.getPostsFlow(), _page, _query) { posts, favourites, page, query ->
                 Log.d("###", "ON COMBINE -> posts: ${posts.javaClass.simpleName}, favourites: ${favourites.size}, page: $page, query: $query")
 
                 when (posts) {
@@ -50,10 +51,11 @@ class PostsViewModel @Inject constructor(
                     is Async.Success -> {
                         val postList = posts.data
                         val canLoadMore = page*Constants.PAGE_SIZE < postList.size
+                        val size = min(page*Constants.PAGE_SIZE, postList.size)
                         _uiState.update {
                             it.copy(
                                 ui = UiState.Success(page),
-                                posts = postList.subList(0, page*Constants.PAGE_SIZE).map {
+                                posts = postList.subList(0, size).map {
                                     p -> Post(
                                             userId = p.userId,
                                             id = p.id,
@@ -81,6 +83,11 @@ class PostsViewModel @Inject constructor(
     fun onSearchQueryChange(query: String) {
         _uiState.update {
             it.copy(query = query)
+        }
+    }
+    fun toggleFavouritesPost(post: Post) {
+        viewModelScope.launch {
+
         }
     }
 

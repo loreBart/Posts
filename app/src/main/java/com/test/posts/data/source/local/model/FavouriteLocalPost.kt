@@ -6,11 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "posts")
 data class FavouriteLocalPost(
-    @ColumnInfo(name = "user_id")
-    val userId: Int,
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int,
+    @ColumnInfo(name = "user_id")
+    val userId: Int,
     @ColumnInfo(name = "title")
     val title: String,
     @ColumnInfo(name = "body")

@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavouritePostDao {
     @Query("SELECT * FROM posts")
-    fun getPosts(): Flow<List<FavouriteLocalPost>>
+    fun getPostsFlow(): Flow<List<FavouriteLocalPost>>
+
+    @Query("SELECT * FROM posts")
+    suspend fun getPosts(): List<FavouriteLocalPost>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: FavouriteLocalPost)

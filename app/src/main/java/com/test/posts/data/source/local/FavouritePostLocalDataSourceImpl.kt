@@ -6,7 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 class FavouritePostLocalDataSourceImpl(private val favouritePostDao: FavouritePostDao) : FavouritePostLocalDataSource {
 
-    override fun getPosts(): Flow<List<FavouriteLocalPost>> {
+    override fun getPostsFlow(): Flow<List<FavouriteLocalPost>> {
+        return favouritePostDao.getPostsFlow()
+    }
+
+    override suspend fun getPosts(): List<FavouriteLocalPost> {
         return favouritePostDao.getPosts()
     }
 

@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavouritePostLocalDataSource {
 
-    fun getPosts(): Flow<List<FavouriteLocalPost>>
+    fun getPostsFlow(): Flow<List<FavouriteLocalPost>>
+
+    suspend fun getPosts(): List<FavouriteLocalPost>
 
     suspend fun insert(post: FavouriteLocalPost)
 

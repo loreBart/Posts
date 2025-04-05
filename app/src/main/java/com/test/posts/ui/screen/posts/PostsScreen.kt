@@ -1,5 +1,6 @@
 package com.test.posts.ui.screen.posts
 
+import android.util.Log
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -105,6 +106,9 @@ fun PostsScreen(
                             onPostClick = {
                                 Timber.tag("###").d("Clicked post $post")
                                 onNavigateDetails.invoke(post)
+                            },
+                            onClickFavouritePost = { post ->
+                                viewModel.toggleFavouritesPost(post)
                             }
                         )
                     }
@@ -124,28 +128,27 @@ fun PostsScreen(
                             }
                         }
                     }
-
                 }
                 InfiniteListHandler(
                     lazyListState = lazyListState,
                     canLoadMore = uiState.canLoadMore
                 ) {
-                    val p = uiState.page
-                    val n = p + 1
-                    Timber.tag("###").d("INFINITE HANDLER p:$p->$n")
-                    viewModel.loadPage(n)
+                    if (uiState.canLoadMore) {
+                        val p = uiState.page
+                        val n = p + 1
+                        viewModel.loadPage(n)
+                    }
                 }
             }
-
         }
-
     }
 }
 
 @Composable
 fun PostItem(
     post: Post,
-    onPostClick: (Post) -> Unit
+    onPostClick: (Post) -> Unit,
+    onClickFavouritePost: (Post) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -169,15 +172,22 @@ fun PostItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f)
                 )
-                Icon(
-                    imageVector = if (post.isFavourite) {
-                        Icons.Rounded.Favorite
-                    } else {
-                        Icons.Rounded.FavoriteBorder
-                    },
-                    contentDescription = stringResource(R.string.favourite),
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
+                IconButton(
+                    onClick = {
+                        onClickFavouritePost(post)
+                        Log.d("###", "onClicked <<<<FavouritePost>>>> POST ID: ${post.id}")
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (post.isFavourite) {
+                            Icons.Rounded.Favorite
+                        } else {
+                            Icons.Rounded.FavoriteBorder
+                        },
+                        contentDescription = stringResource(R.string.favourite),
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
 
             }
             Text(

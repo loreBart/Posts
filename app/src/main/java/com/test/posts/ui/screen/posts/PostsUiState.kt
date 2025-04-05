@@ -23,5 +23,5 @@ data class PostsUiState(
     val query: String = "",
     val posts: List<Post> = emptyList(),
     val page: Int = 1,
-    val canLoadMore: Boolean = true
+    val canLoadMore: Boolean = false
 )
