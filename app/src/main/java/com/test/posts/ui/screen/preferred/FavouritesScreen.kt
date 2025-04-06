@@ -34,7 +34,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.test.posts.R
 import com.test.posts.data.model.Post
-import timber.log.Timber
 
 @Composable
 fun FavouritesScreen(
@@ -70,7 +69,6 @@ fun FavouritesScreen(
                         FavouritePostItem(
                             post = post,
                             onPostClick = {
-                                Timber.tag("###").d("Clicked post $post")
                                 onNavigateDetails.invoke(post)
                             },
                             onClickFavouritePost = { p ->

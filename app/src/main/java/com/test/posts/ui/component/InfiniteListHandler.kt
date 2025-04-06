@@ -7,7 +7,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import timber.log.Timber
 
 @Composable
 fun InfiniteListHandler(
@@ -21,9 +20,6 @@ fun InfiniteListHandler(
             val totalItems = layoutInfo.totalItemsCount
             val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0)
             val cond = totalItems > 0 && lastVisibleItemIndex >= (totalItems - 1)
-            //Timber.tag("###").d("onScroll lastVisibleItemIndex: $lastVisibleItemIndex")
-            //Timber.tag("###").d("                   totalItems: $totalItems")
-            //Timber.tag("###").d("                    CONDITION: $cond")
             Pair(cond, totalItems)
         }
     }
@@ -34,13 +30,9 @@ fun InfiniteListHandler(
         snapshotFlow { loadMore.value }
             .distinctUntilChanged()
             .collect { load ->
-                Timber.tag("###").d("calling (${load.first}) callback FOR SIZE: ${load.second}")
                 if (load.first) {
-                    Timber.tag("###").d("calling 222222")
                     if (!loadedPages.contains(load.second)) {
-                        Timber.tag("###").d("calling 333333")
                         loadedPages.add(load.second)
-                        Timber.tag("###").d("calling canLoadMore: $canLoadMore")
                         if (canLoadMore) {
                             onLoadMore()
                         }

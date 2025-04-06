@@ -45,7 +45,6 @@ import com.test.posts.ui.component.ErrorState
 import com.test.posts.ui.component.InfiniteListHandler
 import com.test.posts.ui.component.LoadingIndicator
 import com.test.posts.ui.theme.AppTheme
-import timber.log.Timber
 
 @Composable
     fun PostsScreen(
@@ -111,7 +110,6 @@ fun PostsScreenContent(
                 PostItem(
                     post = post,
                     onPostClick = {
-                        Timber.tag("###").d("Clicked post $post")
                         onNavigateDetails.invoke(post)
                     },
                     onClickFavouritePost = { p ->
