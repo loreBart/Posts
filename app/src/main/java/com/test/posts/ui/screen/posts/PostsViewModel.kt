@@ -71,7 +71,7 @@ class PostsViewModel @Inject constructor(
     fun loadPage(nextPage: Int) {
         viewModelScope.launch {
             // Simulate network request
-            delay(1000)
+            delay(500)
             _page.update { nextPage }
         }
     }
