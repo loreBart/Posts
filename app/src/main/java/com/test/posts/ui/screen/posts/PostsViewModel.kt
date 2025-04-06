@@ -1,7 +1,5 @@
 package com.test.posts.ui.screen.posts
 
-import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.posts.data.Async
@@ -25,20 +23,16 @@ import kotlin.math.min
 @HiltViewModel
 class PostsViewModel @Inject constructor(
     private val postRepository: PostRepository,
-    private val favouritePostRepository: FavouritePostRepository,
-    savedStateHandle: SavedStateHandle
+    private val favouritePostRepository: FavouritePostRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PostsUiState())
+    val uiState = _uiState.asStateFlow()
     private val _page = MutableStateFlow(1)
     val page = _page.asStateFlow()
-    private val _query = MutableStateFlow("")
-    val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            combine(postRepository.loadPosts(), favouritePostRepository.getPostsFlow(), _page, _query) { posts, favourites, page, query ->
-                Log.d("###", "ON COMBINE -> posts: ${posts.javaClass.simpleName}, favourites: ${favourites.size}, page: $page, query: $query")
-
+            combine(postRepository.loadPosts(), favouritePostRepository.getPostsFlow(), _page) { posts, favourites, page ->
                 when (posts) {
                     is Async.Loading -> {
                         _uiState.update {
@@ -54,7 +48,6 @@ class PostsViewModel @Inject constructor(
                         val postList = posts.data
                         val canLoadMore = page*Constants.PAGE_SIZE < postList.size
                         val size = min(page*Constants.PAGE_SIZE, postList.size)
-                        Log.d("###", "ON COMBINE -> canLoadMore: $canLoadMore")
                         _uiState.update {
                             it.copy(
                                 ui = UiState.Success(page),
@@ -76,18 +69,13 @@ class PostsViewModel @Inject constructor(
     }
 
     fun loadPage(nextPage: Int) {
-        Log.d("###", "loadPage NEXT PAGE -> $nextPage")
         viewModelScope.launch {
             // Simulate network request
             delay(1000)
             _page.update { nextPage }
         }
     }
-    fun onSearchQueryChange(query: String) {
-        _uiState.update {
-            it.copy(query = query)
-        }
-    }
+
     fun toggleIsFavourite(post: Post) {
         viewModelScope.launch {
             val id = post.id

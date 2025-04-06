@@ -1,6 +1,5 @@
 package com.test.posts.ui.screen.postdetails
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.posts.data.model.Post
@@ -15,8 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostDetailsViewModel @Inject constructor(
-    private val favouritePostRepository: FavouritePostRepository,
-    savedStateHandle: SavedStateHandle
+    private val favouritePostRepository: FavouritePostRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PostDetailsUiState())
     val uiState = _uiState.asStateFlow()

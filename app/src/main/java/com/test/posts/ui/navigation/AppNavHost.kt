@@ -1,6 +1,5 @@
 package com.test.posts.ui.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,14 +22,12 @@ fun AppNavHost(
                 startScreen = navigationBarStartScreen,
                 onNavigateDetails = { post: Post ->
                     navController.currentBackStackEntry?.savedStateHandle?.set("post", post)
-                    Log.d("###", "POST 111 ----------> $post")
                     navController.navigate(Screen.Details.route + "/${post.id}")
                 }
             )
         }
         composable(route = Screen.Details.route + "/{postId}") {
             val post = navController.previousBackStackEntry?.savedStateHandle?.get<Post>("post")
-            Log.d("###", "POST 222 ----------> $post")
             post?.let {
                 PostDetailsScreen(post, onNavigateUp = { navController.navigateUp() })
             }

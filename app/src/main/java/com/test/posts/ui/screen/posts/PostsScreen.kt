@@ -1,8 +1,5 @@
 package com.test.posts.ui.screen.posts
 
-import android.util.Log
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -21,9 +17,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.Card
@@ -36,17 +29,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -59,7 +46,6 @@ import com.test.posts.ui.component.InfiniteListHandler
 import com.test.posts.ui.component.LoadingIndicator
 import com.test.posts.ui.theme.AppTheme
 import timber.log.Timber
-import kotlin.math.roundToInt
 
 @Composable
     fun PostsScreen(
@@ -194,7 +180,6 @@ fun PostItem(
                 IconButton(
                     onClick = {
                         onClickFavouritePost(post)
-                        Log.d("###", "onClicked <<<<FavouritePost>>>> POST ID: ${post.id}")
                     }
                 ) {
                     Icon(
@@ -230,89 +215,6 @@ fun PostItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostsTopBar() {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    var isSearch by remember { mutableStateOf(false) }
-    var value by remember { mutableStateOf("") }
-
-    Crossfade(
-        modifier = Modifier.animateContentSize(),
-        targetState = isSearch,
-        label = stringResource(R.string.top_bar_search)
-    ) { target ->
-        if (!target) {
-            TopAppBar(
-                title = { Text("Cards") },
-                actions = {
-                    IconButton(onClick = { isSearch = !isSearch } ) {
-                        Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = stringResource(R.string.top_bar_search)
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior,
-            )
-        } else {
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .windowInsetsPadding(TopAppBarDefaults.windowInsets)
-                    .layout { measurable, constraints ->
-                        val placeable = measurable.measure(constraints)
-                        val height = placeable.height * (1 - scrollBehavior.state.collapsedFraction)
-                        layout(placeable.width, height.roundToInt()) {
-                            placeable.place(0, 0)
-                        }
-                    },
-                value = value,
-                placeholder = { Text("Enter card name") },
-                onValueChange = { value = it },
-                leadingIcon = {
-                    IconButton(onClick = { isSearch = !isSearch} ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.top_bar_back)
-                        )
-                    }
-                },
-                trailingIcon = if (value.isNotBlank()) {
-                    {
-                        IconButton(onClick = { value = "" } ) {
-                            Icon(
-                                imageVector = Icons.Filled.Close,
-                                contentDescription = stringResource(R.string.top_bar_back)
-                            )
-                        }
-                    }
-                } else {
-                    null
-                }
-            )
-        }
-    }
-    /*
-    SearchBar(
-        modifier = Modifier
-            .align(Alignment.TopCenter)
-            .semantics { traversalIndex = 0f },
-        inputField = {
-            SearchBarDefaults.InputField(
-                query = textFieldState.text.toString(),
-                onQueryChange = { textFieldState.edit { replace(0, length, it) } },
-                onSearch = {
-                    onSearch(textFieldState.text.toString())
-                    expanded = false
-                },
-                expanded = expanded,
-                onExpandedChange = { expanded = it },
-                placeholder = { Text("Search") }
-            )
-        },
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-    )
-    */
-    /*
     TopAppBar(
         title = {
             Text(
@@ -320,14 +222,8 @@ fun PostsTopBar() {
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            scrolledContainerColor = MaterialTheme.colorScheme.background
-        ),
-        modifier = modifier
+        }
     )
-     */
 }
 
 @Preview

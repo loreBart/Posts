@@ -133,11 +133,7 @@ fun PostDetailsTopBar(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
-        },
-//        colors = TopAppBarDefaults.topAppBarColors(
-//            containerColor = MaterialTheme.colorScheme.background,
-//            scrolledContainerColor = MaterialTheme.colorScheme.background
-//        )
+        }
     )
 }
 
