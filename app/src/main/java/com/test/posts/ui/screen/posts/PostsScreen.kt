@@ -62,7 +62,7 @@ import timber.log.Timber
 import kotlin.math.roundToInt
 
 @Composable
-fun PostsScreen(
+    fun PostsScreen(
     onNavigateDetails: (Post) -> Unit,
     viewModel: PostsViewModel = hiltViewModel()
 ) {
@@ -106,6 +106,8 @@ fun PostsScreenContent(
     viewModel: PostsViewModel,
     uiState: PostsUiState
 ) {
+    val page by viewModel.page.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -153,7 +155,7 @@ fun PostsScreenContent(
             canLoadMore = uiState.canLoadMore
         ) {
             if (uiState.canLoadMore) {
-                val p = uiState.page
+                val p = page
                 val n = p + 1
                 viewModel.loadPage(n)
             }

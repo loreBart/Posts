@@ -30,6 +30,7 @@ class PostsViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PostsUiState())
     private val _page = MutableStateFlow(1)
+    val page = _page.asStateFlow()
     private val _query = MutableStateFlow("")
     val uiState = _uiState.asStateFlow()
 
@@ -65,18 +66,13 @@ class PostsViewModel @Inject constructor(
                                             body = p.body,
                                             isFavourite = isFavouritePost(p.id, favourites))
                                 },
-                                canLoadMore = canLoadMore,
-                                page = page
+                                canLoadMore = canLoadMore
                             )
                         }
                     }
                 }
             }.launchIn(viewModelScope)
         }
-    }
-
-    fun reload() {
-
     }
 
     fun loadPage(nextPage: Int) {
