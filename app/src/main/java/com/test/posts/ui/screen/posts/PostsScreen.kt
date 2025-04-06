@@ -171,12 +171,7 @@ fun PostItem(
                 .fillMaxSize()
         ) {
             Row {
-                Text(
-                    text = post.id.toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(modifier = Modifier.weight(1f))
                 IconButton(
                     onClick = {
                         onClickFavouritePost(post)
