@@ -11,11 +11,7 @@ data class Post(
     val title: String,
     val body: String,
     val isFavourite: Boolean
-) : Parcelable {
-    companion object {
-        val EMPTY: Post = Post(0, 0, "","", false)
-    }
-}
+) : Parcelable
 
 fun Post.toFavourite(): FavouriteLocalPost {
     return FavouriteLocalPost(id = id, userId = userId, title = title, body = body)
